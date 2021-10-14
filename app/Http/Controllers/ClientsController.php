@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Birthday;
 use App\Models\User;
 use App\Models\Financial;
 use Illuminate\Http\Request;
@@ -51,12 +52,12 @@ class ClientsController extends Controller
     {
         $data = $request->all();
         $user = auth()->user();
-        
+
         $client = $user->clients()->create($data);
-        
+
         //$client->create($request->all());
         return back()->with('success','Cliente salvo com sucesso!');
-        
+
     }
 
     /**
@@ -79,13 +80,17 @@ class ClientsController extends Controller
 
         $orderProducts = Client::find($clientId)->orderProducts()->get();
 
-        // dd($orderProducts);
+        $birthdays = Client::find($clientId)->birthdays()->get();
+
+
+        // dd($birthdays);
 
 
         return view('dashboard.clients.single',[
             'financials'        => $financials,
             'client'            => $client,
-            'orderProducts'     => $orderProducts
+            'orderProducts'     => $orderProducts,
+            'birthdays'         => $birthdays
         ]);
     }
 

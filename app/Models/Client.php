@@ -39,4 +39,13 @@ class Client extends Model
     {
         return $this->hasMany(OrderProduct::class);
     }
+
+    public function birthday()
+    {
+        return $this->belongsTo(Birthday::class);
+    }
+    public function birthdays()
+    {
+        return $this->hasMany(Birthday::class);
+    }
 }

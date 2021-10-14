@@ -15,6 +15,9 @@
                 <li class="nav-item" role="presentation">
                   <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Historico</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="niver-tab" data-toggle="tab" href="#niver" role="tab" aria-controls="niver" aria-selected="false">Aniversários</a>
+                </li>
             </ul>
 
                 <div class="tab-content" id="myTabContent">
@@ -91,7 +94,7 @@
                                                     <button type="submit" class="btn btn-info btn-sm mr-3" data-toggle="modal" data-target="#editar{{$f->id}}">
                                                         <span class="fas fa-edit"></span>
                                                     </button>
-                            
+
                                                     <form action="{{route('dashboard.report.financial.destroy', ['idParcela' => $f->id])}}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
@@ -100,7 +103,7 @@
                                                 </div>
                                             </td>
                                           </tr>
-                            
+
                                             <!-- Modal Dar baixa -->
                                             <div class="modal fade" id="darbaixa{{$f->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
@@ -141,7 +144,7 @@
                                                                     <input type="date" class="form-control" name="datapagamento" value="{{date('Y-m-d')}}">
                                                                 </div>
                                                             </div>
-                                                        
+
                                                     </div>
                                                     <input type="hidden" name="vp" value="{{$f->valor}}">
                                                     <div class="modal-footer">
@@ -152,7 +155,7 @@
                                                 </div>
                                                 </div>
                                             </div>
-                            
+
                                             <!-- Modal Editar-->
                                             <div class="modal fade" id="editar{{$f->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
@@ -186,7 +189,7 @@
                                                 </div>
                                                 </div>
                                             </div>
-                              
+
                                         @endforeach
                                     </tbody>
                                   </table>
@@ -238,6 +241,101 @@
                                   </table>
                             </div>
                         </div>
+                    </div>
+                    <div class="tab-pane fade border-right border-bottom border-left" id="niver" role="tabpanel" aria-labelledby="niver-tab">
+                        <div class="row">
+                            <h4 class="p-4 ml-2 text-center">Aniversáriantes ligado a este cliente</h4>
+                        </div>
+                        <div class="row m-4">
+                            <div class="col">
+                                <button type="submit" class="btn btn-info btn-sm mr-3" data-toggle="modal" data-target="#newBirthday">
+                                    <span class="fas fa-plus"></span> Adicionar
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-warning btn-sm">Deletar todos</button>
+                            </div>
+
+                        </div>
+
+
+                            <div class="row">
+
+                                <div class="col">
+                                    <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Nome</th>
+                                            <th scope="col">Parentesco</th>
+                                            <th scope="col">Data</th>
+                                            <th scope="col">#</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+
+
+                                            @forelse ($birthdays as $bt)
+                                                <tr>
+
+                                                    <th scope="row">{{$bt->name}}</th>
+                                                    <td>{{$bt->relationship}}</td>
+                                                    <td>{{date("d/m/Y", strtotime($bt->date))}}</td>
+                                                    <td>
+                                                        <form action="{{route("dashboard.birthday.delete", ['birthdayId' => $bt->id])}}" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <input value="x" type="submit" class="btn btn-danger btn-sm px-3">
+                                                        </form>
+                                                    </td>
+                                            @empty
+                                                <p>Cliente sem Aniversários cadastrados</p>
+                                            @endforelse
+                                        </tbody>
+                                      </table>
+                                </div>
+                            </div>
+
+                            <!-- Modal Adicionar Aniversários-->
+                            <div class="modal fade" id="newBirthday" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Adicionar Novo Aniversário</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{route('dashboard.birthday.new',['clientId'=> $client['id']])}}" method="post">
+                                            @csrf
+                                            <div class="row mt-1">
+                                                <div class="col-12">
+                                                    <label>Nome</label>
+                                                    <input type="text" class="form-control" name="name">
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col-12">
+                                                    <label>Parentesco:</label>
+                                                    <input type="text" class="form-control" name="relationship">
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col-12">
+                                                    <label>Data de Nacimento</label>
+                                                    <input type="date" class="form-control" name="birthday" >
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <input type="hidden" name="clientId" value="{{$client['id']}}">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                        <button type="submit" class="btn btn-success">Adicionar +</button>
+                                    </div>
+                                </form>
+                                </div>
+                                </div>
+                            </div>
                     </div>
                 </div>
 

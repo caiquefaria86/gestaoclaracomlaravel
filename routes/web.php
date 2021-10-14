@@ -8,6 +8,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\catalogsController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\BirthdayController;
 use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\Admin\Plans\PlansController;
 use App\Http\Controllers\Report\SalesReportController;
@@ -45,6 +46,11 @@ Route::get('/dashboard/relatorio/vendas/{mes?}/{ano?}/{qtdpg?}', [App\Http\Contr
 Route::get('/dashboard/relatorio/financeiro/{mes?}/{ano?}/{qtdpg?}', [App\Http\Controllers\Report\FinancialController::class, 'index'])->name('dashboard.report.financial.index')->middleware('auth');
 Route::post('/dashboard/relatorio/financeiro/baixar/{idParcela}', [App\Http\Controllers\Report\FinancialController::class, 'baixar'])->name('dashboard.report.financial.baixar')->middleware('auth');
 Route::delete('/dashboard/relatorio/financeiro/destroy/{idParcela}', [App\Http\Controllers\Report\FinancialController::class, 'destroy'])->name('dashboard.report.financial.destroy')->middleware('auth');
+
+Route::post('dashboard/relatorio/aniversario/new/{clientId}', [BirthdayController::class , 'store'])->name('dashboard.birthday.new')->middleware('auth');
+Route::delete('dashboard/relatorio/aniversario/{birthdayId}', [BirthdayController::class , 'destroy'])->name('dashboard.birthday.delete')->middleware('auth');
+
+
 
 Route::get('/painel/planos/novo', [PlansController::class, 'create'])->name('admin.plans.create')->middleware('auth');
 Route::post('/painel/planos/new', [PlansController::class, 'createPlan'])->name('admin.plans.new')->middleware('auth');

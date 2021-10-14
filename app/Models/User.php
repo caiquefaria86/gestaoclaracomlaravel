@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Client;
 use App\Models\Catalog;
 use App\Models\Product;
+use App\Models\Birthday;
 use App\Models\Financial;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -49,7 +50,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Client::class);
     }
-    
+
     public function catalogs()
     {
         return $this->hasMany(catalog::class);
@@ -81,4 +82,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Financial::class);
     }
+
+    public function birthdays()
+    {
+        return $this->hasMany(Birthday::class);
+    }
+
 }
